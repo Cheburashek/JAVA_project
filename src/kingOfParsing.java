@@ -3,6 +3,7 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.lang.reflect.Array;
 import java.sql.*;
 import java.util.Iterator;
 import java.sql.*;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
@@ -26,7 +28,6 @@ public class kingOfParsing
 	
 	Document docToParse;
     Logger parserLogger = Logger.getLogger( kingOfParsing.class );
-
     
     // Constructor:
 	kingOfParsing()
@@ -49,12 +50,15 @@ public class kingOfParsing
 			satDataStorage satData = new satDataStorage ();
 			
 			
-			// Main loop:
+			// Main loop, all satelites:
 			for ( Element actSat : satelites )
 			{
+
+				List<TextNode> temp;
+
+				temp = actSat.textNodes();
 				
-				//satData.
-				
+				parserLogger.info(temp);
 				
 			}
 			
@@ -77,7 +81,8 @@ public class kingOfParsing
 // Class for parsed data storage:
 final class satDataStorage
 {
-	
+	//TODO: add websides addresses
+	String position;
 	String name;
 	String freq;
 	String polar;
