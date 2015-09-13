@@ -1,5 +1,4 @@
 import java.io.IOException;  
-
 import java.io.File;
 import org.jsoup.Jsoup; 
 import org.jsoup.nodes.Document;  
@@ -8,14 +7,13 @@ import org.apache.log4j.BasicConfigurator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
+// Class for downloading a website from www address as a .html file
 
 public class kingOfDownloading
-{
-
+{	
+    Logger downloaderLogger = Logger.getLogger( kingOfDownloading.class );    
     
-    Logger downloaderLogger = Logger.getLogger( kingOfDownloading.class );
-
-	
+	//***********************************************************************
 	// Constructor:
     kingOfDownloading()
 	{		
@@ -23,6 +21,7 @@ public class kingOfDownloading
 	}
 	
     
+	//***********************************************************************
 	//Trying to connect and download data from the website to a file on disk:
     public void getFile ( File file, String address, String location )
     {
@@ -49,7 +48,7 @@ public class kingOfDownloading
 	        }
 	        catch ( IOException e )       
 	        {        	
-	            downloaderLogger.error ( "Cannot connect to website!" + e );	            
+	            downloaderLogger.error ( "Cannot connect to the website!" + e );	            
 	        }
 	        
 			downloaderLogger.debug ( "Page succesfully stored in file: " + location );
@@ -59,8 +58,5 @@ public class kingOfDownloading
         {
         	downloaderLogger.error ( "Problems with file" + e ); 
         }
-
-    }
-    
-
+    }   
 }

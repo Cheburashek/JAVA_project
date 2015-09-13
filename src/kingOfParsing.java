@@ -1,17 +1,13 @@
-
- 
+import java.io.File;
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 
-
+// Class to parse a website
 
 public class kingOfParsing 
 {
@@ -21,33 +17,34 @@ public class kingOfParsing
 	Document docToParse;
     Logger parserLogger = Logger.getLogger( kingOfParsing.class );
     
+    //***********************************************************************
     // Constructor:
 	kingOfParsing()
 	{
 		BasicConfigurator.configure();	
-	}
+	}	
 	
 	
+	//***********************************************************************
 	// ParseFile:
-	public int parseFile( File stored, String address, String locationSQL )
+	public void parseFile( File stored, String address, String locationSQL )
 	{
 		
 		Document website;
-		Elements satelites;
+		Elements satellites;
 		kingOfSQL dataBase = new kingOfSQL( locationSQL );
-		
+		satDataStorage satData = new satDataStorage ();
+
 		
 		try
 		{
 			website = Jsoup.parse( stored, "UTF-8", address );
 			
-			satelites = website.getElementsByClass ( "frq" ); // From the website html, satelites configuration
-			
-			satDataStorage satData = new satDataStorage ();
-			
+			satellites = website.getElementsByClass ( "frq" ); // From the website html, satelites configuration
+		
 						
-			// Main loop, all satelites:
-			for ( Element actSat : satelites )
+			// Main loop, all satellites:
+			for ( Element actSat : satellites )			
 			{
 				//TODO: change bitrate storing manner
 				
@@ -78,8 +75,9 @@ public class kingOfParsing
 				satData.NID = 			actSat.childNode(1).childNode(1).childNode(21).childNode(0).toString();		
 				satData.TID = 			actSat.childNode(1).childNode(1).childNode(23).childNode(0).toString();
 				
-				// Store into database:
+				// Store into a database:
 				dataBase.storeSatSQL ( satData );
+							
 				
 			}
 			parserLogger.info( "Parsing and storing into SQL database done!" );
@@ -88,16 +86,8 @@ public class kingOfParsing
 		{			
 			parserLogger.error ("File is not accessible!");
 			System.exit(0);
-			return 0;
-		}
-		
-		
-		// Return number of satellites:
-		return ( satelites.size() );
-		
+		}		
 	}
-	
-	
 }
 
 
