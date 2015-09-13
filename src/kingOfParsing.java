@@ -11,11 +11,10 @@ import org.apache.log4j.BasicConfigurator;
 
 public class kingOfParsing 
 {
-
-	//File inputTxt = new File ( "downPage.txt");
 	
 	Document docToParse;
     Logger parserLogger = Logger.getLogger( kingOfParsing.class );
+    
     
     //***********************************************************************
     // Constructor:
