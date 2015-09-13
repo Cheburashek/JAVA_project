@@ -13,7 +13,7 @@ public class kingOfDownloading
 {
 
     
-    Logger downloaderLogger = Logger.getLogger( mainApp.class );
+    Logger downloaderLogger = Logger.getLogger( kingOfDownloading.class );
 
 	
 	// Constructor:
@@ -24,7 +24,7 @@ public class kingOfDownloading
 	
     
 	//Trying to connect and download data from the website to a file on disk:
-    public void getFile ( String address, File file, String location )
+    public void getFile ( File file, String address, String location )
     {
     	Document doc;
         StringBuilder content = new StringBuilder();
@@ -49,7 +49,7 @@ public class kingOfDownloading
 	        }
 	        catch ( IOException e )       
 	        {        	
-	            downloaderLogger.error ( "Cannot connect to website!" + e ); 
+	            downloaderLogger.error ( "Cannot connect to website!" + e );	            
 	        }
 	        
 			downloaderLogger.debug ( "Page succesfully stored in file: " + location );

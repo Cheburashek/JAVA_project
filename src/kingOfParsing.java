@@ -3,22 +3,13 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.sql.*;
-import java.util.Iterator;
-import java.sql.*;
-import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
-
-
 
 
 
@@ -38,16 +29,20 @@ public class kingOfParsing
 	
 	
 	// ParseFile:
-	public void parseFile( File stored, String address )
+	public int parseFile( File stored, String address, String locationSQL )
 	{
 		
 		Document website;
+		Elements satelites;
+		kingOfSQL dataBase = new kingOfSQL( locationSQL );
+		
 		
 		try
 		{
 			website = Jsoup.parse( stored, "UTF-8", address );
 			
-			Elements satelites = website.getElementsByClass ( "frq" ); // From the website html, satelites configuration
+			satelites = website.getElementsByClass ( "frq" ); // From the website html, satelites configuration
+			
 			satDataStorage satData = new satDataStorage ();
 			
 						
@@ -64,7 +59,7 @@ public class kingOfParsing
 				satData.bundle = 		actSat.childNode(1).childNode(1).childNode(11).childNode(0).childNode(0).toString();	
 				satData.standard = 		actSat.childNode(1).childNode(1).childNode(13).childNode(0).toString();
 				satData.modulation = 	actSat.childNode(1).childNode(1).childNode(15).childNode(0).toString();	
-				satData.symbolRate = 	actSat.childNode(1).childNode(1).childNode(17).childNode(0).toString();						
+				satData.symbolRate = 	actSat.childNode(1).childNode(1).childNode(17).childNode(0).childNode(0).toString();						
 				satData.FEC =			actSat.childNode(1).childNode(1).childNode(17).childNode(2).childNode(0).toString();
 				
 				// Sometimes provider is unknown:
@@ -82,36 +77,28 @@ public class kingOfParsing
 				
 				satData.NID = 			actSat.childNode(1).childNode(1).childNode(21).childNode(0).toString();		
 				satData.TID = 			actSat.childNode(1).childNode(1).childNode(23).childNode(0).toString();
-
-			}			
+				
+				// Store into database:
+				dataBase.storeSatSQL ( satData );
+				
+			}
+			parserLogger.info( "Parsing and storing into SQL database done!" );
 		}
 		catch ( IOException e )
 		{			
-			parserLogger.error ("File is not accessible!");			
+			parserLogger.error ("File is not accessible!");
+			System.exit(0);
+			return 0;
 		}
+		
+		
+		// Return number of satellites:
+		return ( satelites.size() );
+		
 	}
-}
-
-
-// Class for parsed data storage:
-final class satDataStorage
-{
-	//TODO: add websites addresses
-	String position;
-	String name;
-	String freq;
-	String polar;
-	String transponder;
-	String bundle; 
-	String standard;
-	String modulation;
-	String symbolRate;
-	String FEC;
-	String provider;
-	String bitRate;
-	String NID;		// Network ID
-	String TID;		// Transponder ID
 	
-	// Constructor:
-	satDataStorage(){}
+	
 }
+
+
+
